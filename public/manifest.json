@@ -1,0 +1,27 @@
+{
+    "name": "Apate",
+    "short_name": "Apate",
+    "icons": [
+        {
+            "src": "icons/apate-32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        }, {
+            "src": "icons/apate-64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        }, {
+            "src": "icons/apate-128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        }, {
+            "src": "icons/apate-256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#37474f",
+    "background_color": "#37474f"
+}

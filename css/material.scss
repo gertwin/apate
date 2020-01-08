@@ -1,0 +1,82 @@
+
+$mdc-theme-primary: #1e88e5;
+$mdc-theme-secondary: green;
+$mdc-theme-background: yellow;
+
+@import "@material/form-field/mdc-form-field";
+@import "@material/button/mdc-button";
+@import "@material/icon-button/mdc-icon-button";
+@import "@material/switch/mdc-switch";
+@import "@material/radio/mdc-radio";
+@import "@material/dialog/mdc-dialog";
+@import "@material/list/mdc-list";
+@import "@material/textfield/mdc-text-field";
+@import "@material/line-ripple/mdc-line-ripple";
+@import "@material/fab/mdc-fab";
+@import "@material/form-field/mdc-form-field";
+@import "@material/radio/mdc-radio";
+@import "@material/switch/mdc-switch";
+
+
+.mdc-button--raised {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+.delete .mdc-button__icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0px;
+    font-size: 24px;
+    color: red;
+}
+
+.mdc-form-field {
+  color: inherit;
+  display: flex;
+  font: inherit;
+}
+
+.mdc-radio {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle  {
+  border-color: white;
+  opacity: 0.3;
+}
+
+.mdc-switch {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mdc-switch.mdc-switch--checked .mdc-switch__track {
+  opacity: 0.26;
+}
+
+.mdc-switch:not(.mdc-switch--checked) .mdc-switch__thumb {
+  border-color: rgb(185, 185, 185);
+}
+
+.mdc-switch:not(.mdc-switch--checked) .mdc-switch__track {
+  background-color: white;
+  border-color: white;
+  opacity: 0.3;
+}
+
+.mdc-icon-button {
+  -webkit-app-region: no-drag;
+}
+
+.mdc-icon-button::before {
+  -webkit-transition: opacity 200ms;
+}
+
+.mdc-fab .mdc-fab__icon {
+    width: 36px;
+    height: 36px;
+    font-size: 36px;
+}
+

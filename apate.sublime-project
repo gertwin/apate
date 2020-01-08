@@ -1,0 +1,19 @@
+{
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				".git"
+			],
+
+			"file_exclude_patterns":
+			[
+				"*-bundle*.js",
+				"*-bundle*.js.*"
+			],
+
+			"path": "."
+		}
+	]
+}

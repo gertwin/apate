@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apate</title>
+    <meta name="theme-color" content="#37474f"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="icons/favicon-16.png"/>
+    <link href="css/theme-default.css" rel="stylesheet">
+    <link href="css/theme-dark.css" rel="stylesheet">
+    <link href="css/theme-light.css" rel="stylesheet">
+    <link href="css/print.css" rel="stylesheet" media="print">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="mdc-typography">
+    <div class="hidden">
+        <input type="file" id="file-selector" name='selected' accept="*" />
+    </div>
+    <div id="window-container">
+        <div id="sidebar">
+            <div id="sidebar-resizer"></div>
+            <div id="file-tabs-menu">
+                <h1>APATE</h1>
+                <hr>
+                <ul id="file-menu">
+                    <li id="file-menu-new"><div i18n-content="fileMenuNew"></div></li>
+                    <li id="file-menu-open"><div i18n-content="fileMenuOpen"></div></li>
+                    <li id="file-menu-save"><div i18n-content="fileMenuSave"></div></li>
+                    <li id="file-menu-saveas"><div i18n-content="fileMenuSaveas"></div></li>
+                </ul>
+                <hr>
+                <div id="tabs-list-container">
+                    <ul id="tabs-list"></ul>
+                </div>
+                <hr>
+                <ul class="settings-switch-ul">
+                    <li id="open-settings"><div i18n-content="menuSettings"></div></li>
+                </ul>
+            </div>
+            <!--
+            Settings menu
+            -->
+            <div id="settings-menu">
+                <h1 i18n-content="menuSettings"></h1>
+                <hr>
+                <div id="settings-container">
+                    <ul id="settings-list">
+                        <li>
+                            <label for="setting-fontsize" i18n-content="fontsizeSetting"></label>
+                            <input type="text" id="setting-fontsize" size="1" maxlength="2"
+                                pattern="\d\d?" value="14"
+                                i18n-values="title:fontsizeTooltip">
+                        </li>
+                        <li>
+                            <label for="setting-spacestab" i18n-content="spacestabSetting"></label>
+                            <div class="mdc-switch" id="setting-spacestab-switch">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__thumb-underlay">
+                                    <div class="mdc-switch__thumb">
+                                        <input type="checkbox" id="setting-spacestab"
+                                            class="mdc-switch__native-control" role="switch">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <label for="setting-tabsize" i18n-content="tabsizeSetting"></label>
+                            <input type="text" id="setting-tabsize" size="1" maxlength="2"
+                                pattern="\d\d?" value="8">
+                        </li>
+                        <li>
+                            <label for="setting-wraplines" i18n-content="wraplinesSetting"></label>
+                            <div class="mdc-switch" id="setting-wraplines-switch">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__thumb-underlay">
+                                    <div class="mdc-switch__thumb">
+                                        <input type="checkbox" id="setting-wraplines"
+                                            class="mdc-switch__native-control" role="switch">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <label for="setting-linenumbers" i18n-content="linenumbersSetting"></label>
+                            <div class="mdc-switch" id="setting-linenumbers-switch">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__thumb-underlay">
+                                    <div class="mdc-switch__thumb">
+                                        <input type="checkbox" id="setting-linenumbers"
+                                            class="mdc-switch__native-control" role="switch">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <label for="setting-smartindent" i18n-content="smartindentSetting"></label>
+                            <div class="mdc-switch" id="setting-smartindent-switch">
+                                <div class="mdc-switch__track"></div>
+                                <div class="mdc-switch__thumb-underlay">
+                                    <div class="mdc-switch__thumb">
+                                        <input type="checkbox" id="setting-smartindent"
+                                            class="mdc-switch__native-control" role="switch">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <div class="group">
+                            <h2 i18n-content="themeSetting"></h2>
+                            <div class="mdc-form-field">
+                                <label for="setting-theme-default" i18n-content="defaultThemeOption"></label>
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control"
+                                        type="radio"
+                                        id="setting-theme-default"
+                                        name="setting-theme"
+                                        value="default">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mdc-form-field">
+                                <label for="setting-theme-light" i18n-content="lightThemeOption"></label>
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control"
+                                        type="radio"
+                                        id="setting-theme-light"
+                                        name="setting-theme"
+                                        value="light">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+                <hr>
+                <ul class="settings-switch-ul">
+                    <li id="close-settings">
+                        <div i18n-content="closeSettings"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="main-container">
+            <header>
+                <button
+                    id="toggle-sidebar"
+                    class="mdc-icon-button material-icons"
+                    i18n-values="title:openSidebarButton">menu</button>
+                <div class="search-container">
+                    <div id="search-input-container">
+                        <input
+                            type="search"
+                            id="search-input"
+                            list="search-history"
+                            autocomplete="none"
+                            value=""
+                            i18n-values="placeholder:searchPlaceholder">
+                    </div>
+                    <datalist id="search-history">
+                        <!-- <option value="previous search"> -->
+                    </datalist>
+                    <button
+                        class="search-navigation-button mdc-icon-button material-icons"
+                        id="search-previous-button"
+                        i18n-values="title:searchPreviousButton">expand_less</button>
+                    <button
+                        class="search-navigation-button mdc-icon-button material-icons"
+                        id="search-next-button"
+                        i18n-values="title:searchNextButton">expand_more</button>
+                </div>
+                <div id="search-count-container">
+                    <span id="search-counting"></span>
+                </div>
+                <!-- <div id="title-filename" i18n-content="errorTitle"></div> -->
+                <div class="tool-container">
+                    <button id="btn-import" class="mdc-icon-button material-icons">cloud_upload</button>
+                    <button id="btn-export" class="mdc-icon-button material-icons">cloud_download</button>
+                    <a id="btn-report" class="mdc-icon-button material-icons" href="https://github.com/gertwin/APATE" rel="noopener noreferrer" target="_blank">report</a>
+                </div>
+            </header>
+            <!-- Editor component -->
+            <div id="editor">
+                <button id="button-run" class="mdc-fab mdc-fab__ripple" aria-label="Run program" i18n-values="title:runButton">
+                    <span class="mdc-fab__icon material-icons md-36">play_arrow</span>
+                </button>
+            </div>
+            <!-- Output panel component -->
+            <div id="bottombar">
+                <div id="bottombar-resizer"></div>
+                <div id="bottom-header" class="panel-header">
+                    <span id="bottom-label" i18n-content="outputPanelLabel">Output</span>
+                    <div class="tool-container">
+                        <button id="output-clear" class="mdc-icon-button material-icons">delete_sweep</button>
+                        <button id="toggle-bottombar" class="mdc-icon-button material-icons">import_export</button>
+                    </div>
+                </div>
+                <hr>
+                <div id="panel-container">
+                    <!-- Output panel -->
+                    <div id="output"></div>
+                </div>
+            </div>
+        </div> <!-- main-container -->
+    </div> <!-- window-container -->
+
+    <!-- Output message item -->
+    <script id="output-message" type="text/template">
+        <p class="console-output">{{text}}</p>
+    </script>
+
+    <!-- Output error item -->
+    <script id="output-error" type="text/template">
+        <p class="console-output"><span class="error">{{text}}</span></p>
+    </script>
+
+    <!-- Dialog open listitem -->
+    <script id="file-listitem" type="text/template">
+        <li class="mdc-list-item" tabindex="0">
+            <div style="width: 15em">
+                <span class="mdc-list-item__text">{{filename}}</span>
+            </div>
+            <div>
+                <button class="mdc-button mdc-button delete">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">delete_forever</i>
+                </button>
+            </div>
+        </li>
+    </script>
+
+    <!-- Dialog open -->
+    <div id="dialog-open"
+        class="mdc-dialog"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="dialog-open-title">
+        <div id="dialog-open-container" class="mdc-dialog__container">
+            <div class="mdc-dialog__surface dialog-open-panel">
+                <h2 id="dialog-open-title"
+                    class="mdc-dialog__title">title</h2>
+                <div class="mdc-dialog__content">
+                    <div class="open-content">
+                        <ul id="fileopen-list" class="mdc-list">
+                            <!-- file-listitems -->
+                        </ul>
+                    </div>
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <!-- Save -->
+                    <button id="open-btn" class="mdc-button mdc-button--raised">
+                        <span i18n-content="openDialogButton">Open</span>
+                    </button>
+                    <button id="not-open-btn" class="mdc-button">
+                        <span i18n-content="cancelDialogButton">Cancel</span>
+                    </button>
+
+                </footer>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <!-- Dialog SaveAs -->
+    <div id="dialog-saveas"
+        class="mdc-dialog"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="dialog-saveas-title">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface">
+                <form id="form-saveas" autocomplete="off">
+                    <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                    <h2
+                        id="dialog-saveas-title"
+                        class="mdc-dialog__title">title</h2>
+                    <div class="mdc-dialog__content">
+                        <div class="saveas-content">
+                            <div class="mdc-text-field mdc-text-field--outlined" id="form-group-filename">
+                                <input type="text" class="mdc-text-field__input" id="text-field-filename" required>
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="tf-outlined" class="mdc-floating-label">
+                                            <span i18n-content="filenameLabel">filename</span>
+                                        </label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="mdc-dialog__actions">
+                        <!-- Save -->
+                        <button id="save-btn" class="mdc-button mdc-button--raised">
+                            <span i18n-content="saveDialogButton">Yes</span>
+                        </button>
+                        <button id="not-save-btn" class="mdc-button">
+                            <span i18n-content="cancelDialogButton">Cancel</span>
+                        </button>
+
+                    </footer>
+                </form>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <!-- MessageBox -->
+    <div id="message-box"
+        class="mdc-dialog"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="messagebox-title"
+        aria-describedby="messagebox-content">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface">
+                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                <h2
+                    id="messagebox-title"
+                    class="mdc-dialog__title">title</h2>
+                <div class="mdc-dialog__content" id="messagebox-content">
+                    <h3
+                        id="messagebox-message"
+                        class="mdc-dialog__title">message</h3>
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <!-- Yes -->
+                    <button id="msg-yes-btn" class="mdc-button mdc-button--raised">
+                        <span i18n-content="yesDialogButton">Yes</span>
+                    </button>
+                    <!-- No -->
+                    <button id="msg-no-btn" class="mdc-button">
+                        <span i18n-content="noDialogButton">No</span>
+                    </button>
+                    <!-- OK -->
+                    <button id="msg-ok-btn" class="mdc-button mdc-button--raised">
+                        <span i18n-content="okDialogButton">OK</span>
+                    </button>
+                    <!-- Cancel -->
+                    <button id="msg-cancel-btn" class="mdc-button">
+                        <span i18n-content="cancelDialogButton">Cancel</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <!-- /JS -->
+    <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+    <script src="apate-bundle.js" type="text/javascript"></script>
+</body>
+</html>

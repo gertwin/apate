@@ -1,0 +1,3 @@
+[submodule "third_party/analytics"]
+	path = third_party/analytics
+	url = https://github.com/googlearchive/chrome-platform-analytics

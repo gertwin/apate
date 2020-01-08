@@ -1,0 +1,43 @@
+
+#show-modules {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#switch-modules {
+    margin-right: 5px;
+}
+
+#dialog-open-container {
+    width: 50%;
+}
+
+div.dialog-open-panel {
+    height: 60%;
+}
+
+div.open-content {
+    width: 100%;
+    height: 80%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.mdc-dialog__content {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.saveas-content {
+    padding-top: 0.5em;
+}
+
+#form-group-filename {
+    width: 400px;
+}
+
+#fileopen-list {
+    width: 400px;
+}

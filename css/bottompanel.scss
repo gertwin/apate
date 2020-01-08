@@ -1,0 +1,105 @@
+
+.panel-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background-color: #eee;
+}
+
+#bottombar {
+    background-color: var(--light-background-color);
+    /*background-color: var(--dark-background-color)*/
+    /*border-top: 2px solid var(--light-divider-color);*/
+    /*color: #EBEBEB;*/
+    cursor: default;
+    font-size: 120%;
+    width: 100%;
+    height: 100%;
+    overflow: none;
+    position: relative;
+    transition: width 0.3s ease-in-out, background-color 0.2s;
+}
+
+#bottombar hr {
+    background-color: var(--light-divider-color);
+    border: none;
+    height: 2px;
+    margin: 0;
+}
+
+#bottombar-resizer {
+    background-color: var(--light-background-color);
+    /*background-color: var(--light-divider-color);*/
+    cursor: n-resize;
+    position: relative;
+    left: 0;
+    /*bottom: 0;*/
+    right: 0;
+    height: 4px;
+    z-index: 2;
+}
+
+#bottom-header {
+    background-color: var(--light-background-color);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 52px;
+}
+
+#bottom-label {
+    align-self: flex-start;
+    font-size: 17px;
+    /*color: var(--light-panel-devider-color);*/
+    margin-top: 0.8em;
+    margin-left: 1em;
+}
+
+#btn-bottom-close {
+    align-self: flex-end;
+}
+
+#panel-container {
+    overflow: auto;
+}
+
+#output {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--light-background-color);
+}
+
+#bottombar .mdc-icon-button {
+    opacity: 0.54;
+}
+
+#bottombar .mdc-icon-button:hover {
+    opacity: 1.0;
+    color: #1e88e5;
+    -webkit-transition: opacity 200ms;
+}
+
+#bottom-label {
+    opacity: 0.54;
+}
+
+#bottombar p {
+    opacity: 0.74;
+}
+
+.console-output {
+    margin: 0;
+    padding-top: 0.2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 0.2em;
+    background-color: var(--light-background-color);
+}
+
+.console-output .error {
+    opacity: 1.0;
+    color: red;
+}
