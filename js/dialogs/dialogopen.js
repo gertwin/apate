@@ -53,8 +53,9 @@ const DialogDocumentOpen = (documentStore) => {
      */
     const getFileListItem = (filename) => {
         const template = document.querySelector('#file-listitem');
-        template.content.querySelector('#filename').textContent = filename;
-        return document.importNode(template.content, true);
+        const clone = document.importNode(template.content, true);
+        clone.querySelector('#filename').textContent = filename;
+        return clone;
     };
 
     /**
