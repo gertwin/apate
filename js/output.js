@@ -7,15 +7,16 @@ APATE.namespace('APATE.Output');
 
 
 APATE.Output = (function output() {
+
     /**
      * generate a single message item
      * @param  {string} text log text
      * @return {string} dom node
      */
     const getMessageTemplate = (elemId, text) => {
-        let template = document.querySelector(elemId).innerHTML;
-        template = template.replace('{{text}}', text);
-        return template;
+        const template = document.querySelector(elemId);
+        template.content.querySelector('#message').textContent = text;
+        return document.importNode(template.content, true);
     };
 
     const fnConstructor = function fn(outputElement) {
@@ -44,16 +45,14 @@ APATE.Output = (function output() {
          * Add a line to the output
          */
         addLine(text) {
-            const item = getMessageTemplate('#output-message', text);
-            this.element.insertAdjacentHTML('beforeend', item);
+            this.element.appendChild(getMessageTemplate('#output-message', text));
         },
 
         /**
          * Add a error line to the output
          */
         addError(error) {
-            const item = getMessageTemplate('#output-error', error);
-            this.element.insertAdjacentHTML('beforeend', item);
+            this.element.appendChild(getMessageTemplate('#output-error', error));
         },
     };
 

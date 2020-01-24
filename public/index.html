@@ -207,29 +207,6 @@
         </div> <!-- main-container -->
     </div> <!-- window-container -->
 
-    <!-- Output message item -->
-    <script id="output-message" type="text/template">
-        <p class="console-output">{{text}}</p>
-    </script>
-
-    <!-- Output error item -->
-    <script id="output-error" type="text/template">
-        <p class="console-output"><span class="error">{{text}}</span></p>
-    </script>
-
-    <!-- Dialog open listitem -->
-    <script id="file-listitem" type="text/template">
-        <li class="mdc-list-item" tabindex="0">
-            <div style="width: 15em">
-                <span class="mdc-list-item__text">{{filename}}</span>
-            </div>
-            <div>
-                <button class="mdc-button mdc-button delete">
-                    <i class="material-icons mdc-button__icon" aria-hidden="true">delete_forever</i>
-                </button>
-            </div>
-        </li>
-    </script>
 
     <!-- Dialog open -->
     <div id="dialog-open"
@@ -348,6 +325,35 @@
         </div>
         <div class="mdc-dialog__scrim"></div>
     </div>
+
+    <!--
+        ****** Template definitions ******
+    -->
+
+    <!-- Output message item -->
+    <template id="output-message">
+        <p class="console-output"><span id="message" class="success"></span></p>
+    </template>
+
+    <!-- Output error item -->
+    <template id="output-error">
+        <p class="console-output"><span id="message" class="error"></span></p>
+    </template>
+
+    <!-- Dialog open listitem -->
+    <template id="file-listitem">
+        <li class="mdc-list-item" tabindex="0">
+            <div style="width: 15em">
+                <span id="filename" class="mdc-list-item__text"></span>
+            </div>
+            <div>
+                <button class="mdc-button mdc-button delete">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">delete_forever</i>
+                </button>
+            </div>
+        </li>
+    </template>
+
     <!-- /JS -->
     <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
     <script src="apate-bundle.js" type="text/javascript"></script>

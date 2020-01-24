@@ -52,9 +52,9 @@ const DialogDocumentOpen = (documentStore) => {
      * @return {string}          dom node
      */
     const getFileListItem = (filename) => {
-        let template = document.querySelector('#file-listitem').innerHTML;
-        template = template.replace('{{filename}}', filename);
-        return template;
+        const template = document.querySelector('#file-listitem');
+        template.content.querySelector('#filename').textContent = filename;
+        return document.importNode(template.content, true);
     };
 
     /**
@@ -68,8 +68,7 @@ const DialogDocumentOpen = (documentStore) => {
         // get current list
         datastore.getAllDocumentNames().then((names) => {
             names.forEach((name) => {
-                const listitem = getFileListItem(name);
-                listElem.insertAdjacentHTML('beforeend', listitem);
+                listElem.appendChild(getFileListItem(name));
                 // new added element
                 const newElem = listElem.lastElementChild;
                 newElem.setAttribute('data-key', name);
