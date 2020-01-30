@@ -12,6 +12,11 @@
     <link rel="manifest" href="manifest.json">
 </head>
 <body class="mdc-typography">
+    <!-- Templates -->
+    <link-template src="templates/form-open.html"></link-template>
+
+
+
     <div class="hidden">
         <input type="file" id="file-selector" name='selected' accept="*" />
     </div>
@@ -208,37 +213,6 @@
     </div> <!-- window-container -->
 
 
-    <!-- Dialog open -->
-    <div id="dialog-open"
-        class="mdc-dialog"
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="dialog-open-title">
-        <div id="dialog-open-container" class="mdc-dialog__container">
-            <div class="mdc-dialog__surface dialog-open-panel">
-                <h2 id="dialog-open-title"
-                    class="mdc-dialog__title">title</h2>
-                <div class="mdc-dialog__content">
-                    <div class="open-content">
-                        <ul id="fileopen-list" class="mdc-list">
-                            <!-- file-listitems -->
-                        </ul>
-                    </div>
-                </div>
-                <footer class="mdc-dialog__actions">
-                    <!-- Save -->
-                    <button id="open-btn" class="mdc-button mdc-button--raised">
-                        <span i18n-content="openDialogButton">Open</span>
-                    </button>
-                    <button id="not-open-btn" class="mdc-button">
-                        <span i18n-content="cancelDialogButton">Cancel</span>
-                    </button>
-
-                </footer>
-            </div>
-        </div>
-        <div class="mdc-dialog__scrim"></div>
-    </div>
 
     <!-- Dialog SaveAs -->
     <div id="dialog-saveas"
@@ -326,6 +300,7 @@
         <div class="mdc-dialog__scrim"></div>
     </div>
 
+
     <!--
         ****** Template definitions ******
     -->
@@ -340,22 +315,14 @@
         <p class="console-output"><span id="message" class="error"></span></p>
     </template>
 
-    <!-- Dialog open listitem -->
-    <template id="file-listitem">
-        <li class="mdc-list-item" tabindex="0">
-            <div style="width: 15em">
-                <span id="filename" class="mdc-list-item__text"></span>
-            </div>
-            <div>
-                <button class="mdc-button mdc-button delete">
-                    <i class="material-icons mdc-button__icon" aria-hidden="true">delete_forever</i>
-                </button>
-            </div>
-        </li>
-    </template>
 
     <!-- /JS -->
     <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
     <script src="apate-bundle.js" type="text/javascript"></script>
+
+
+    <!-- form open component -->
+    <form-open></form-open>
+
 </body>
 </html>

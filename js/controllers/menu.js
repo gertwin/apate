@@ -127,7 +127,7 @@ APATE.MenuController = (function menuController() {
         },
 
         open() {
-            this.tabs.openFile();
+            this.tabs.selectFile();
             return false;
         },
 

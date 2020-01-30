@@ -1,0 +1,48 @@
+
+<!-- Dialog open -->
+<template id="form-open-template">
+    <div id="form-open"
+        class="mdc-dialog"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="form-open-title">
+        <div id="form-open-container" class="mdc-dialog__container">
+            <div class="mdc-dialog__surface form-open-panel">
+                <h2 id="form-open-title"
+                    class="mdc-dialog__title">title</h2>
+                <div class="mdc-dialog__content">
+                    <div class="open-content">
+                        <ul id="fileopen-list" class="mdc-list">
+                            <!-- file-listitems -->
+                        </ul>
+                    </div>
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <!-- Save -->
+                    <button id="open-btn" class="mdc-button mdc-button--raised">
+                        <span i18n-content="openDialogButton">Open</span>
+                    </button>
+                    <button id="not-open-btn" class="mdc-button">
+                        <span i18n-content="cancelDialogButton">Cancel</span>
+                    </button>
+
+                </footer>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+</template>
+
+<!-- Dialog open listitem -->
+<template id="file-listitem">
+    <li class="mdc-list-item" tabindex="0">
+        <div style="width: 15em">
+            <span id="filename" class="mdc-list-item__text"></span>
+        </div>
+        <div>
+            <button class="mdc-button mdc-button delete">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">delete_forever</i>
+            </button>
+        </div>
+    </li>
+</template>

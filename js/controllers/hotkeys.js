@@ -68,7 +68,7 @@ APATE.HotkeysController = (function hotkeysController() {
 
                 case 'o':
                 case 'O':
-                    this.tabs.openFile();
+                    this.tabs.selectFile();
                     return false;
 
                 case 'p':

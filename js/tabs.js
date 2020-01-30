@@ -4,11 +4,10 @@ import utils from './utils/utils';
 import i18n from './utils/i18n';
 import Injector from './utils/injector';
 import Tab from './tab';
-import DialogDocumentOpen from './dialogs/dialogopen';
 import DialogSaveAs from './dialogs/dialogsaveas';
 import MessageBox from './dialogs/messagebox';
 
-/* globals $, document, FileReader */
+/* globals $, EVENT, window, document, FileReader */
 
 APATE.namespace('APATE');
 
@@ -25,6 +24,9 @@ const Tabs = (documentStore) => {
         this.tabs = [];
         this.currentTab = null;
         $(document).bind('docchange', this.onDocChanged.bind(this));
+
+        // event handlers
+        window.EventBus.addEventListener(EVENT.OPEN_FILE, this.onOpenFile.bind(this));
     };
 
     /**
@@ -252,18 +254,22 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
         /**
          * Select an file to open from a dialog
          */
-        openFile() {
-            const dialog = new DialogDocumentOpen();
-            dialog.show(`${i18n.getMessage('openTitle')}`).then((dlgResult) => {
-                if (dlgResult.id === dlgResult.BUTTON.OPEN) {
-                    // load file content
-                    documentStore.getDocumentData(dialog.fileName).then((storeResult) => {
-                        // open new tab
-                        this.newTab(storeResult.data, dialog.fileName);
-                    }).catch((message) => {
-                        console.log(message);
-                    });
-                }
+        selectFile() {
+            window.EventBus.dispatchEvent(EVENT.FORM_OPEN_SHOW, { title: i18n.getMessage('openTitle') });
+        },
+
+        /**
+         * Open a file event handler
+         * @param  {[type]} event [description]
+         * @return {[type]}       [description]
+         */
+        onOpenFile(event) {
+            // load file content
+            documentStore.getDocumentData(event.detail.filename).then((storeResult) => {
+                // open new tab
+                this.newTab(storeResult.data, event.detail.filename);
+            }).catch((message) => {
+                console.log(message);
             });
         },
 
