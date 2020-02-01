@@ -61,7 +61,7 @@ export default APATE.components.FormOpenElement = class extends HTMLElement {
             }
         });
 
-        window.EventBus.addEventListener(EVENT.FORM_OPEN_SHOW, (event) => {
+        window.EventBus.addEventListener(EVENT.SHOW_FORM_OPEN, (event) => {
             this.show(event.detail.title);
         });
 
@@ -117,7 +117,7 @@ export default APATE.components.FormOpenElement = class extends HTMLElement {
         const onClosed = (e) => {
             this._dialog.unlisten('MDCDialog:closed', onClosed);
             if (e.detail.action === IDS.OPEN_DOCUMENT) {
-                window.EventBus.dispatchEvent(EVENT.OPEN_FILE, { filename: this._selectedFilename });
+                window.EventBus.dispatchEvent(EVENT.ON_OPEN_FILE, { filename: this._selectedFilename });
             }
         };
 

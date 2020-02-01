@@ -10,24 +10,16 @@ import EventBus from './utils/eventbus';
 import APATEApp from './app';
 // components
 import './components/form-open';
+import './components/form-save';
+import './components/message-box';
 
 import '@material/typography/dist/mdc.typography.css';
 
 /* globals window, document, $, navigator */
 
-// eventbus event names
-window.EVENT = {
-    TEMPLATE_LOADED: 'template-loaded',
-    FORM_OPEN_SHOW: 'form-open-show',
-    OPEN_FILE: 'open-file',
-
-
-
-};
 // global eventbus
 window.EventBus = new EventBus();
-
-
+// jquery
 window.jQuery = jQuery;
 window.$ = jQuery;
 

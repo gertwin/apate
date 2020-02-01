@@ -23,6 +23,13 @@ export default APATE.utils.EventBus = class {
     }
 
     /**
+     * Add an event listener for a single invoke.
+     */
+    addEventListenerOnce(event, callback) {
+        this.bus.addEventListener(event, callback, { once: true });
+    }
+
+    /**
      * Remove an event listener.
      */
     removeEventListener(event, callback) {

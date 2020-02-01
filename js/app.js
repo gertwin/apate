@@ -8,7 +8,6 @@ import i18n from './utils/i18n';
 // import utils from './utils/utils';
 import saveAs from './utils/filesaver';
 import i18nTemplate from './utils/i18n-template';
-import MessageBox from './dialogs/messagebox';
 // import picker from './gapi/picker';
 
 import Settings from './settings';
@@ -26,16 +25,13 @@ import Executor from './executor';
 
 import 'material-design-icons/iconfont/material-icons.css';
 
-/* global document, $, Blob */
+/* global EVENT, IDS, window, document, $, Blob */
 
 APATE.namespace('APATE.APATEApp');
 
 
 APATE.APATEApp = (function APATEApp() {
 
-
-    const getFileListItem = () => {
-    };
 
     /**
      * public API -- constructor
@@ -119,8 +115,12 @@ APATE.APATEApp = (function APATEApp() {
                 const openTabs = [];
                 this.openTabs(openTabs);
             }).catch((error) => {
-                const msg = new MessageBox();
-                msg.showOk(null, error);
+                // show message
+                window.EventBus.dispatchEvent(EVENT.SHOW_MESSAGEBOX, {
+                    title: null,
+                    message: error,
+                    buttons: IDS.OK,
+                });
             });
 
             /**
@@ -187,7 +187,7 @@ APATE.APATEApp = (function APATEApp() {
             }
 
             if (!this.tabs.hasOpenTab()) {
-                this.tabs.newTab();
+                this.tabs.onFileNew();
             }
         },
 

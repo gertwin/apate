@@ -14,15 +14,20 @@
 <body class="mdc-typography">
     <!-- Templates -->
     <link-template src="templates/form-open.html"></link-template>
+    <link-template src="templates/form-save.html"></link-template>
+    <link-template src="templates/messagebox.html"></link-template>
 
 
 
     <div class="hidden">
         <input type="file" id="file-selector" name='selected' accept="*" />
     </div>
+    <!-- Window container -->
     <div id="window-container">
+        <!-- Sidebar -->
         <div id="sidebar">
             <div id="sidebar-resizer"></div>
+            <!-- File menu -->
             <div id="file-tabs-menu">
                 <h1>APATE</h1>
                 <hr>
@@ -41,9 +46,7 @@
                     <li id="open-settings"><div i18n-content="menuSettings"></div></li>
                 </ul>
             </div>
-            <!--
-            Settings menu
-            -->
+            <!-- Settings menu -->
             <div id="settings-menu">
                 <h1 i18n-content="menuSettings"></h1>
                 <hr>
@@ -149,6 +152,7 @@
                 </ul>
             </div>
         </div>
+        <!-- Main container -->
         <div id="main-container">
             <header>
                 <button
@@ -209,96 +213,10 @@
                     <div id="output"></div>
                 </div>
             </div>
-        </div> <!-- main-container -->
-    </div> <!-- window-container -->
-
-
-
-    <!-- Dialog SaveAs -->
-    <div id="dialog-saveas"
-        class="mdc-dialog"
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="dialog-saveas-title">
-        <div class="mdc-dialog__container">
-            <div class="mdc-dialog__surface">
-                <form id="form-saveas" autocomplete="off">
-                    <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
-                    <h2
-                        id="dialog-saveas-title"
-                        class="mdc-dialog__title">title</h2>
-                    <div class="mdc-dialog__content">
-                        <div class="saveas-content">
-                            <div class="mdc-text-field mdc-text-field--outlined" id="form-group-filename">
-                                <input type="text" class="mdc-text-field__input" id="text-field-filename" required>
-                                <div class="mdc-notched-outline">
-                                    <div class="mdc-notched-outline__leading"></div>
-                                    <div class="mdc-notched-outline__notch">
-                                        <label for="tf-outlined" class="mdc-floating-label">
-                                            <span i18n-content="filenameLabel">filename</span>
-                                        </label>
-                                    </div>
-                                    <div class="mdc-notched-outline__trailing"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <footer class="mdc-dialog__actions">
-                        <!-- Save -->
-                        <button id="save-btn" class="mdc-button mdc-button--raised">
-                            <span i18n-content="saveDialogButton">Yes</span>
-                        </button>
-                        <button id="not-save-btn" class="mdc-button">
-                            <span i18n-content="cancelDialogButton">Cancel</span>
-                        </button>
-
-                    </footer>
-                </form>
-            </div>
         </div>
-        <div class="mdc-dialog__scrim"></div>
     </div>
 
-    <!-- MessageBox -->
-    <div id="message-box"
-        class="mdc-dialog"
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="messagebox-title"
-        aria-describedby="messagebox-content">
-        <div class="mdc-dialog__container">
-            <div class="mdc-dialog__surface">
-                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
-                <h2
-                    id="messagebox-title"
-                    class="mdc-dialog__title">title</h2>
-                <div class="mdc-dialog__content" id="messagebox-content">
-                    <h3
-                        id="messagebox-message"
-                        class="mdc-dialog__title">message</h3>
-                </div>
-                <footer class="mdc-dialog__actions">
-                    <!-- Yes -->
-                    <button id="msg-yes-btn" class="mdc-button mdc-button--raised">
-                        <span i18n-content="yesDialogButton">Yes</span>
-                    </button>
-                    <!-- No -->
-                    <button id="msg-no-btn" class="mdc-button">
-                        <span i18n-content="noDialogButton">No</span>
-                    </button>
-                    <!-- OK -->
-                    <button id="msg-ok-btn" class="mdc-button mdc-button--raised">
-                        <span i18n-content="okDialogButton">OK</span>
-                    </button>
-                    <!-- Cancel -->
-                    <button id="msg-cancel-btn" class="mdc-button">
-                        <span i18n-content="cancelDialogButton">Cancel</span>
-                    </button>
-                </footer>
-            </div>
-        </div>
-        <div class="mdc-dialog__scrim"></div>
-    </div>
+
 
 
     <!--
@@ -321,8 +239,10 @@
     <script src="apate-bundle.js" type="text/javascript"></script>
 
 
-    <!-- form open component -->
+    <!-- components -->
     <form-open></form-open>
+    <form-save></form-save>
+    <message-box></message-box>
 
 </body>
 </html>
