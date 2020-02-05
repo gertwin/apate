@@ -24,7 +24,7 @@ APATE.utils.Injector = (function injector() {
      * @param  {[type]} func  [description]
      * @return {[type]}       [description]
      */
-    const resolve = (deps, func, context = null) => {
+    const resolve = (deps, func) => {
         const args = [];
         deps.forEach((dep) => {
             if (dependencies[dep]) {
@@ -33,11 +33,6 @@ APATE.utils.Injector = (function injector() {
                 throw new Error(`Can not resolve dependency: '${dep}'`);
             }
         });
-        // bind context if available
-        if (context) {
-            const boundFunc = func.bind(context);
-            return boundFunc(...args);
-        }
         return func(...args);
     };
 

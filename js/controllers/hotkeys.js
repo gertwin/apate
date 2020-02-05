@@ -59,7 +59,7 @@ APATE.HotkeysController = (function hotkeysController() {
                     return false;
 
                 case 'n':
-                    this.tabs.onFileNew();
+                    this.tabs.newTab();
                     return false;
 
                 case 'N':
@@ -68,7 +68,7 @@ APATE.HotkeysController = (function hotkeysController() {
 
                 case 'o':
                 case 'O':
-                    this.tabs.onFileOpen();
+                    this.tabs.openFile();
                     return false;
 
                 case 'p':
@@ -77,15 +77,15 @@ APATE.HotkeysController = (function hotkeysController() {
                     return false;
 
                 case 's':
-                    this.tabs.onFileSave();
+                    this.tabs.save();
                     return false;
 
                 case 'S':
-                    this.tabs.onFileSaveAs();
+                    this.tabs.saveAs();
                     return false;
 
                 case 'w':
-                    this.tabs.onCloseFileCurrent();
+                    this.tabs.closeCurrent();
                     return false;
 
                 case 'Z':

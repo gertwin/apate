@@ -64,7 +64,7 @@ APATE.MenuController = (function menuController() {
             tabElement.addEventListener('dragend', (event) => { this.onDragEnd($(tabElement), event)});
             tabElement.addEventListener('drop', (event) => { this.onDrop(event); });
             tabElement.addEventListener('click', () => { this.tabButtonClicked(id); });
-            closeElement.addEventListener('click', (event) => { this.onCloseTab(event, id); });
+            closeElement.addEventListener('click', (event) => { this.closeTab(event, id); });
         },
 
         onDragStart(listItem) {
@@ -122,22 +122,22 @@ APATE.MenuController = (function menuController() {
         },
 
         newTab() {
-            this.tabs.onFileNew();
+            this.tabs.newTab();
             return false;
         },
 
         open() {
-            this.tabs.onFileOpen();
+            this.tabs.openFile();
             return false;
         },
 
         save() {
-            this.tabs.onFileSave();
+            this.tabs.save();
             return false;
         },
 
         saveas() {
-            this.tabs.onFileSaveAs();
+            this.tabs.saveAs();
             return false;
         },
 
@@ -151,8 +151,8 @@ APATE.MenuController = (function menuController() {
         * @param {!Event} The triggering click event.
         * @param {number} The id of the tab to close.
         */
-        onCloseTab(e, id) {
-            this.tabs.onCloseFile(id);
+        closeTab(e, id) {
+            this.tabs.close(id);
             e.stopPropagation();
         },
 

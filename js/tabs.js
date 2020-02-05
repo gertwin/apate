@@ -4,8 +4,11 @@ import utils from './utils/utils';
 import i18n from './utils/i18n';
 import Injector from './utils/injector';
 import Tab from './tab';
+import DialogDocumentOpen from './dialogs/dialogopen';
+import DialogSaveAs from './dialogs/dialogsaveas';
+import MessageBox from './dialogs/messagebox';
 
-/* globals $, EVENT, IDS, window, document, FileReader */
+/* globals $, document, FileReader */
 
 APATE.namespace('APATE');
 
@@ -33,12 +36,72 @@ const Tabs = (documentStore) => {
         version: '1.0',
 
         /**
+         * Save optTab, or the current tab if no optTab is passed.
+         * @param {*} optTab, optional tab to save
+         * @return {Promise} promise object
+         */
+        save(optTab) {
+            return new Promise((resolve, reject) => {
+                const tab = optTab || this.currentTab;
+                if (tab.hasName()) {
+                    tab.save(documentStore).then(() => {
+                        resolve();
+                    }).catch((message) => {
+                        reject(message);
+                    });
+                } else {
+                    this.saveAs(tab).then(() => {
+                        resolve();
+                    }).catch((message) => {
+                        reject(message);
+                    });
+                }
+            });
+        },
+
+        /**
+         * Save optTab as a new file, or the current tab if no optTab is passed.
+         * @param {*} optTab, optional tab to save
+         * @return {Promise} promise object or null
+         */
+        saveAs(optTab) {
+            return new Promise((resolve, reject) => {
+                const tab = optTab || this.currentTab;
+                const form = new DialogSaveAs();
+                form.show(`${i18n.getMessage('saveAsTitle')}`, tab.getName()).then((result) => {
+                    if (result.id === result.BUTTON.SAVE) {
+                        tab.setName(form.fileName);
+                        tab.save(documentStore).then(() => {
+                            resolve();
+                        }).catch((message) => {
+                            reject(message);
+                        });
+                    }
+                    return null;
+                });
+            });
+        },
+
+        getTabById(id) {
+            for (let i = 0; i < this.tabs.length; i++) {
+                if (this.tabs[i].getId() === id) {
+                    return this.tabs[i];
+                }
+            }
+            return null;
+        },
+
+        getCurrentTab() {
+            return this.currentTab;
+        },
+
+        /**
          * Add a new tab to the open tabs.
          * Or activate a existing tab if allready open
          * @param  {string} fileContent content of the opened file
          * @param  {[type]} fileName    name of the file to add
          */
-        onFileNew(fileContent, fileName) {
+        newTab(fileContent, fileName) {
             const filteredTabs = this.tabs.filter((tab) => {
                 if (tab.name && fileName) {
                     return tab.name === fileName;
@@ -64,160 +127,6 @@ const Tabs = (documentStore) => {
                     this.editor.setMode(session, fileNameExtension);
                 }
             }
-        },
-
-        /**
-         * Select an file to open from a dialog
-         */
-        onFileOpen() {
-            window.EventBus.dispatchEvent(EVENT.SHOW_FORM_OPEN, {
-                title: i18n.getMessage('openTitle'),
-            });
-            // event-listner will only called once
-            window.EventBus.addEventListenerOnce(EVENT.ON_OPEN_FILE, (event) => {
-                // load file content
-                documentStore.getDocumentData(event.detail.filename).then((result) => {
-                    // open new tab
-                    this.onFileNew(result.data, event.detail.filename);
-                }).catch((message) => {
-                    console.log(message);
-                });
-            });
-
-        },
-
-        /**
-         * Save optTab, or the current tab if no optTab is passed.
-         * @param {*} optTab, optional tab to save
-         * @return {Promise} promise object
-         */
-        onFileSave(optTab) {
-            return new Promise((resolve, reject) => {
-                const tab = optTab || this.currentTab;
-                if (tab.hasName()) {
-                    tab.save(documentStore).then(() => {
-                        resolve();
-                    }).catch((message) => {
-                        reject(message);
-                    });
-                } else {
-                    this.onFileSaveAs(tab);
-                    resolve();
-                }
-            });
-        },
-
-        /**
-         * Save optTab as a new file, or the current tab if no optTab is passed.
-         * @param {*} optTab, optional tab to save
-         * @return {Promise} promise object or null
-         */
-        onFileSaveAs(optTab) {
-            const tab = optTab || this.currentTab;
-            window.EventBus.dispatchEvent(EVENT.SHOW_FORM_SAVE, {
-                title: i18n.getMessage('saveAsTitle'),
-                filename: tab.getName(),
-            });
-            // event-listner will only called once
-            window.EventBus.addEventListenerOnce(EVENT.ON_SAVE_FILE, (event) => {
-                tab.setName(event.detail.filename);
-                tab.save(documentStore).then(() => {
-                    console.log(`File ${event.detail.filename} saved.`);
-                }).catch((message) => {
-                    console.log(message);
-                });
-            });
-        },
-
-        /**
-         * Close tab event handler
-         * @param  {Number} tabId, id of the tab to close
-         */
-        onCloseFile(tabId) {
-            let i = 0;
-            for (i = 0; i < this.tabs.length; i++) {
-                if (this.tabs[i].getId() === tabId) {
-                    break;
-                }
-            }
-
-            if (i >= this.tabs.length) {
-                console.error('Can\'t find tab', tabId);
-                return;
-            }
-
-            const tab = this.tabs[i];
-            if (!tab.isSaved()) {
-                const msgText = `${i18n.getMessage('saveFilePromptLine1', [tab.getName()])}
-${i18n.getMessage('saveFilePromptLine2')}`;
-                // show message
-                window.EventBus.dispatchEvent(EVENT.SHOW_MESSAGEBOX, {
-                    title: null,
-                    message: msgText,
-                    buttons: IDS.YES + IDS.NO + IDS.CANCEL,
-                });
-                // event-listner will only called once
-                window.EventBus.addEventListenerOnce(EVENT.ON_RESULT, (event) => {
-                    if (event.detail.button === IDS.YES) {
-                        // save tab
-                        this.onFileSave(tab).then(() => {
-                            this.onCloseTab(tab);
-                        });
-                    } else if (event.detail.button === IDS.NO) {
-                        // close without save
-                        this.onCloseTab(tab);
-                    }
-                });
-            } else {
-                this.onCloseTab(tab);
-            }
-        },
-
-        /**
-         * @param {Tab} tab
-         * Close tab without checking whether it needs to be saved. The safe version
-         * (invoking auto-save and, if needed, SaveAs dialog) is Tabs.close().
-         */
-        onCloseTab(tab) {
-            let i = 0;
-            for (i = 0; i < this.tabs.length; i++) {
-                if (this.tabs[i] === tab) {
-                    break;
-                }
-            }
-
-            this.tabs.splice(i, 1);
-            $.event.trigger('tabclosed', tab);
-
-            if (tab === this.currentTab) {
-                if (this.tabs.length > 0) {
-                    this.nextTab();
-                } else {
-                    this.onFileNew();
-                }
-            }
-        },
-
-        /**
-         * Close the current tab
-         */
-        onCloseFileCurrent() {
-            this.onCloseFile(this.currentTab.getId());
-        },
-
-
-
-        getTabById(id) {
-            for (let i = 0; i < this.tabs.length; i++) {
-                if (this.tabs[i].getId() === id) {
-                    return this.tabs[i];
-                }
-            }
-            return null;
-        },
-
-        getCurrentTab() {
-            return this.currentTab;
         },
 
         /**
@@ -273,6 +182,121 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
         },
 
         /**
+         * Close tab event handler
+         * @param  {Number} tabId, id of the tab to close
+         */
+        close(tabId) {
+            let i = 0;
+            for (i = 0; i < this.tabs.length; i++) {
+                if (this.tabs[i].getId() === tabId) {
+                    break;
+                }
+            }
+
+            if (i >= this.tabs.length) {
+                console.error('Can\'t find tab', tabId);
+                return;
+            }
+
+            const tab = this.tabs[i];
+            if (!tab.isSaved()) {
+                const msgText = `${i18n.getMessage('saveFilePromptLine1', [tab.getName()])}
+${i18n.getMessage('saveFilePromptLine2')}`;
+                const msg = new MessageBox();
+                msg.showYesNoCancel(null, msgText).then((result) => {
+                    if (result.id === result.BUTTON.YES) {
+                        // save tab
+                        this.save(tab).then(() => {
+                            this.closeTab(tab);
+                        });
+                    } else if (result.id === result.BUTTON.NO) {
+                        // close without save
+                        this.closeTab(tab);
+                    }
+                    // cancel, do nothing
+                });
+            } else {
+                this.closeTab(tab);
+            }
+        },
+
+        /**
+         * @param {Tab} tab
+         * Close tab without checking whether it needs to be saved. The safe version
+         * (invoking auto-save and, if needed, SaveAs dialog) is Tabs.close().
+         */
+        closeTab(tab) {
+            let i = 0;
+            for (i = 0; i < this.tabs.length; i++) {
+                if (this.tabs[i] === tab) {
+                    break;
+                }
+            }
+
+            this.tabs.splice(i, 1);
+            $.event.trigger('tabclosed', tab);
+
+            if (tab === this.currentTab) {
+                if (this.tabs.length > 0) {
+                    this.nextTab();
+                } else {
+                    this.newTab();
+                }
+            }
+        },
+
+        closeCurrent() {
+            this.close(this.currentTab.getId());
+        },
+
+        /**
+         * Select an file to open from a dialog
+         */
+        openFile() {
+            const dialog = new DialogDocumentOpen();
+            dialog.show(`${i18n.getMessage('openTitle')}`).then((dlgResult) => {
+                if (dlgResult.id === dlgResult.BUTTON.OPEN) {
+                    // load file content
+                    documentStore.getDocumentData(dialog.fileName).then((storeResult) => {
+                        // open new tab
+                        this.newTab(storeResult.data, dialog.fileName);
+                    }).catch((message) => {
+                        console.log(message);
+                    });
+                }
+            });
+        },
+
+        /**
+         * @param {function()} callback
+         * Invoke the save dialog for all tabs with unsaved progress. Does not close any tabs.
+         */
+        promptAllUnsaved(callback) {
+            this.promptAllUnsavedFromIndex(0, callback);
+        },
+
+        promptAllUnsavedFromIndex(i, callback) {
+            if (i >= this.tabs.length) {
+                callback();
+                return;
+            }
+
+            const tab = this.tabs[i];
+            if (tab.isSaved()) {
+                this.promptAllUnsavedFromIndex(i + 1, callback);
+            } else {
+                this.showTab(this.tabs[i].getId());
+                this.promptSave(tab, (answer) => {
+                    if (answer === 'yes') {
+                        this.save(tab, this.promptAllUnsavedFromIndex.bind(this, i + 1, callback));
+                    } else if (answer === 'no') {
+                        this.promptAllUnsavedFromIndex(i + 1, callback);
+                    }
+                });
+            }
+        },
+
+        /**
          * @return {Array.<FileEntry>}
          */
         getFilesToRetain() {
@@ -313,11 +337,11 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
             const reader = new FileReader();
             reader.onerror = utils.handleFSError;
             reader.onloadend = (e) => {
-                self.onFileNew(e.target.result, file.name);
+                self.newTab(e.target.result, file.name);
                 if (self.tabs.length === 2
                     && !self.tabs[0].getName()
                     && self.tabs[0].isSaved()) {
-                    self.onCloseFile(self.tabs[0].getId());
+                    self.close(self.tabs[0].getId());
                 }
                 // get current tab
                 const tab = this.getCurrentTab();
@@ -335,10 +359,12 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
          * @param {function()=} callback
          */
         saveEntry(tab, entry, callback) {
-            if (entry) {
-                tab.setEntry(entry);
-                this.onFileSave(tab, callback);
+            if (!entry) {
+                return;
             }
+
+            tab.setEntry(entry);
+            this.save(tab, callback);
         },
 
         onDocChanged(e, session) {
