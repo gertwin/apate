@@ -1,5 +1,5 @@
 
-import '../css/app.scss';
+import './css/app.scss';
 import jQuery from 'jquery/dist/jquery';
 import './utils/injectormanager';
 import APATEApp from './app';

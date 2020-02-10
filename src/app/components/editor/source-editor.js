@@ -1,7 +1,7 @@
 
-import APATE from '../apate';
-import CONST from '../const';
-import Search from '../search';
+import APATE from '../../apate';
+import CONST from '../../const';
+import Search from '../../search';
 import CodeMirror from './codemirror-global';
 
 /* globals $ */

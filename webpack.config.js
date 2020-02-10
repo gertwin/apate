@@ -7,8 +7,8 @@ process.env.PORT = 8080;
 
 const config = {
     entry: {
-        apate: './js/index.js',
-        jsscm: './js/jsscm/jsscm.js',
+        apate: './src/app/index.js',
+        jsscm: './src/jsscm/jsscm.js',
     },
     output: {
         path: path.resolve(__dirname, 'public'),

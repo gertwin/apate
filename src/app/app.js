@@ -12,7 +12,7 @@ import MessageBox from './dialogs/messagebox';
 // import picker from './gapi/picker';
 
 import Settings from './settings';
-import Editor from './editor/editor-cm';
+import Editor from './components/editor/source-editor';
 import Tabs from './tabs';
 import Output from './output';
 
@@ -32,10 +32,6 @@ APATE.namespace('APATE.APATEApp');
 
 
 APATE.APATEApp = (function APATEApp() {
-
-
-    const getFileListItem = () => {
-    };
 
     /**
      * public API -- constructor
