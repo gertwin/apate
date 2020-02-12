@@ -7,7 +7,7 @@ import APATE from '../apate';
 APATE.namespace('APATE.utils');
 
 
-export default APATE.utils.LinkTemplate = class extends HTMLElement {
+export default APATE.utils.HtmlTemplate = class extends HTMLElement {
 
     static get observedAttributes() {
         return ['src'];
@@ -73,4 +73,4 @@ export default APATE.utils.LinkTemplate = class extends HTMLElement {
 
 };
 
-customElements.define('link-template', APATE.utils.LinkTemplate);
+customElements.define('html-template', APATE.utils.HtmlTemplate);

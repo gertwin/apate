@@ -3,16 +3,17 @@ import APATE from '../../apate';
 import CONST from '../../const';
 import Search from '../../search';
 import CodeMirror from './codemirror-global';
+import Injector from '../../utils/injector';
 
-/* globals $ */
+/* globals $, HTMLElement */
 
-APATE.namespace('APATE.Editor');
+APATE.namespace('APATE');
 
 
-APATE.Editor = (function editor() {
-    const fnConstructor = function fn(editorElement, settings) {
+const SourceEditor = (settings) => {
+
+    const fnConstructor = function fn(editorElement) {
         this.element = editorElement;
-        this.settings = settings;
         this.cm = CodeMirror(editorElement, {
             value: '',
             autofocus: true,
@@ -114,7 +115,7 @@ APATE.Editor = (function editor() {
         setTabSize(size) {
             this.cm.setOption('tabSize', size);
             this.cm.setOption('indentUnit', size);
-            this.replaceTabWithSpaces(this.settings.get('spacestab'));
+            this.replaceTabWithSpaces(settings.get('spacestab'));
         },
 
         /**
@@ -153,7 +154,7 @@ APATE.Editor = (function editor() {
             if (val) {
                 // Need to update this closure once the tabsize has changed. So, have to
                 // call this method when it happens.
-                const tabsize = this.settings.get('tabsize');
+                const tabsize = settings.get('tabsize');
 
                 CodeMirror.commands.defaultTab = (cm) => {
                     if (cm.somethingSelected()) {
@@ -185,7 +186,7 @@ APATE.Editor = (function editor() {
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
-
-export default APATE.Editor;
+APATE.SourceEditor = Injector.resolve(['settings'], SourceEditor);
+export default APATE.SourceEditor;

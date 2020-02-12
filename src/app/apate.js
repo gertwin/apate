@@ -1,5 +1,5 @@
 
-const APATE = APATE || {};
+const APATE = {};
 
 /**
  * namespace creation function.

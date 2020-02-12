@@ -13,15 +13,16 @@
 </head>
 <body class="mdc-typography">
 
-
-
-
+    <!-- Hidden file selector -->
     <div class="hidden">
         <input type="file" id="file-selector" name='selected' accept="*" />
     </div>
+
     <div id="window-container">
+        <!-- Sidebar -->
         <div id="sidebar">
             <div id="sidebar-resizer"></div>
+            <!-- Menu -->
             <div id="file-tabs-menu">
                 <h1>APATE</h1>
                 <hr>
@@ -40,9 +41,7 @@
                     <li id="open-settings"><div i18n-content="menuSettings"></div></li>
                 </ul>
             </div>
-            <!--
-            Settings menu
-            -->
+            <!-- Settings -->
             <div id="settings-menu">
                 <h1 i18n-content="menuSettings"></h1>
                 <hr>
@@ -332,6 +331,13 @@
     <!--
         ****** Template definitions ******
     -->
+
+    <!-- Editor template -->
+    <template id="editor-template">
+        <div id="editor">
+        </div>
+    </template>
+
 
     <!-- Output message item -->
     <template id="output-message">

@@ -11,17 +11,18 @@ import i18nTemplate from './utils/i18n-template';
 import MessageBox from './dialogs/messagebox';
 // import picker from './gapi/picker';
 
-import Settings from './settings';
+// import Settings from './stores/settings';
 import Editor from './components/editor/source-editor';
-import Tabs from './tabs';
+import Tabs from './components/sidebar/menu/tabs';
 import Output from './output';
 
 import HotkeysController from './controllers/hotkeys';
-import MenuController from './controllers/menu';
-import SearchController from './controllers/search';
-import SettingsController from './controllers/settings';
+import MenuController from './components/sidebar/menu/menu-controller';
+import SearchController from './components/navbar/search';
+import SettingsController from './components/sidebar/settings/settings-controller';
 import WindowController from './controllers/window';
 
+import Injector from './utils/injector';
 import Executor from './executor';
 
 import 'material-design-icons/iconfont/material-icons.css';
@@ -31,14 +32,13 @@ import 'material-design-icons/iconfont/material-icons.css';
 APATE.namespace('APATE.APATEApp');
 
 
-APATE.APATEApp = (function APATEApp() {
+const ApateApp = (settings) => {
 
     /**
      * public API -- constructor
      */
     const fnConstructor = function fnConstructor() {
         this.editor = null;
-        this.settings = null;
         this.tabs = null;
 
         this.hotkeysController = null;
@@ -65,25 +65,22 @@ APATE.APATEApp = (function APATEApp() {
          * All initializations should be done here.
         */
         async init() {
-            this.settings = new Settings();
             // components
-            this.editor = new Editor($('#editor')[0], this.settings);
-            this.tabs = new Tabs(this.editor, this.settings);
+            this.editor = new Editor($('#editor')[0]);
+            this.tabs = new Tabs(this.editor);
             this.output = new Output($('#output')[0]);
             // controllers
             this.menuController = new MenuController(this.tabs);
             this.searchController = new SearchController(this.editor.getSearch());
-            this.settingsController = new SettingsController(this.settings);
+            this.settingsController = new SettingsController();
             this.windowController = new WindowController({
                 editor: this.editor,
                 output: this.output,
-                settings: this.settings,
                 tabs: this.tabs,
             });
             this.hotkeysController = new HotkeysController(this.windowController,
                 this.tabs,
-                this.editor,
-                this.settings);
+                this.editor);
             // file selection handler
             this.fileSelectorElem = document.querySelector('input[id="file-selector"]');
             if (this.fileSelectorElem) {
@@ -195,7 +192,7 @@ APATE.APATEApp = (function APATEApp() {
         },
 
         setTheme() {
-            const theme = this.settings.get('theme');
+            const theme = settings.get('theme');
             this.windowController.setTheme(theme);
             this.editor.setTheme(theme);
         },
@@ -206,12 +203,12 @@ APATE.APATEApp = (function APATEApp() {
         onSettingsReady() {
             this.setTheme();
             // editor settings
-            this.editor.setFontSize(this.settings.get('fontsize'));
-            this.editor.showHideLineNumbers(this.settings.get('linenumbers'));
-            this.editor.setSmartIndent(this.settings.get('smartindent'));
-            this.editor.replaceTabWithSpaces(this.settings.get('spacestab'));
-            this.editor.setTabSize(this.settings.get('tabsize'));
-            this.editor.setWrapLines(this.settings.get('wraplines'));
+            this.editor.setFontSize(settings.get('fontsize'));
+            this.editor.showHideLineNumbers(settings.get('linenumbers'));
+            this.editor.setSmartIndent(settings.get('smartindent'));
+            this.editor.replaceTabWithSpaces(settings.get('spacestab'));
+            this.editor.setTabSize(settings.get('tabsize'));
+            this.editor.setWrapLines(settings.get('wraplines'));
         },
 
         /**
@@ -234,7 +231,7 @@ APATE.APATEApp = (function APATEApp() {
                 break;
 
             case 'spacestab':
-                this.editor.replaceTabWithSpaces(this.settings.get('spacestab'));
+                this.editor.replaceTabWithSpaces(settings.get('spacestab'));
                 break;
 
             case 'tabsize':
@@ -256,6 +253,7 @@ APATE.APATEApp = (function APATEApp() {
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
-export default APATE.APATEApp;
+APATE.ApateApp = Injector.resolve(['settings'], ApateApp);
+export default APATE.ApateApp;

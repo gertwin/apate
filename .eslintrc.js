@@ -16,6 +16,9 @@ module.exports = {
             'padded-blocks': ['error', { 'classes': 'always' }],
             'quote-props': ['error', 'consistent'],
             'arrow-body-style': ['error', 'always'],
+            'no-underscore-dangle': [ 'error', { 'allowAfterThis': true }],
+            'no-bitwise': ['error', { 'allow': ['|', '&'] }]
+
             // 'consistent-return': ['error', { 'treatUndefinedAsUnspecified': true }]
         },
         parserOptions: {

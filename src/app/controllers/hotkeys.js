@@ -1,22 +1,23 @@
 
 import APATE from '../apate';
-import i18n from '../utils/i18n';
+// import i18n from '../utils/i18n';
+import Injector from '../utils/injector';
+
 
 /* globals $, document, window */
 
 APATE.namespace('APATE.HotkeysController');
 
 
-APATE.HotkeysController = (function hotkeysController() {
+const HotkeysController = (settings) => {
 
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(windowController, tabs, editor, settings) {
+    const fnConstructor = function fn(windowController, tabs, editor) {
         this.windowController = windowController;
         this.tabs = tabs;
         this.editor = editor;
-        this.settings = settings;
 
         this.ZOOM_IN_FACTOR = 9 / 8;
         this.ZOOM_OUT_FACTOR = 8 / 9;
@@ -94,19 +95,19 @@ APATE.HotkeysController = (function hotkeysController() {
 
                 case '0':
                 case ')':
-                    this.settings.reset('fontsize');
+                    settings.reset('fontsize');
                     return false;
 
                 case '+':
                 case '=':
-                    fontSize = this.settings.get('fontsize');
-                    this.settings.set('fontsize', fontSize * this.ZOOM_IN_FACTOR);
+                    fontSize = settings.get('fontsize');
+                    settings.set('fontsize', fontSize * this.ZOOM_IN_FACTOR);
                     return false;
 
                 case '-':
                 case '_':
-                    fontSize = this.settings.get('fontsize');
-                    this.settings.set('fontsize', fontSize * this.ZOOM_OUT_FACTOR);
+                    fontSize = settings.get('fontsize');
+                    settings.set('fontsize', fontSize * this.ZOOM_OUT_FACTOR);
                     return false;
 
                 default:
@@ -123,11 +124,11 @@ APATE.HotkeysController = (function hotkeysController() {
 
         onMouseWheel(e) {
             if (e.ctrlKey || e.metaKey) {
-                const fontSize = this.settings.get('fontsize');
+                const fontSize = settings.get('fontsize');
                 if (e.wheelDelta > 0) {
-                    this.settings.set('fontsize', fontSize * this.ZOOM_IN_FACTOR);
+                    settings.set('fontsize', fontSize * this.ZOOM_IN_FACTOR);
                 } else {
-                    this.settings.set('fontsize', fontSize * this.ZOOM_OUT_FACTOR);
+                    settings.set('fontsize', fontSize * this.ZOOM_OUT_FACTOR);
                 }
             }
         },
@@ -136,6 +137,7 @@ APATE.HotkeysController = (function hotkeysController() {
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
+APATE.HotkeysController = Injector.resolve(['settings'], HotkeysController);
 export default APATE.HotkeysController;

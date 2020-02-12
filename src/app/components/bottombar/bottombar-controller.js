@@ -1,21 +1,22 @@
 
-import i18n from '../utils/i18n';
-import APATE from '../apate';
+import i18n from '../../utils/i18n';
+import APATE from '../../apate';
+import Injector from '../../utils/injector';
 
 /* globals $, document */
 
-APATE.namespace('APATE.BottombarController');
+APATE.namespace('APATE');
 
 
-APATE.BottombarController = (function BottombarController() {
+const BottombarController = (settings) => {
+
     // minimum bottombar heigth
     const MIN_HEIGHT = 52;
 
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(settings) {
-        this.settings = settings;
+    const fnConstructor = function fn() {
         $('#toggle-bottombar').click(this.toggle.bind(this));
         $('#bottombar-resizer').mousedown(this.resizeStart.bind(this));
     };
@@ -29,9 +30,9 @@ APATE.BottombarController = (function BottombarController() {
         version: '1.0',
 
         init() {
-            const bottombarHeight = this.settings.get('bottombarheight');
+            const bottombarHeight = settings.get('bottombarheight');
             // FIXME: move this to CSS where possible (init code)
-            if (this.settings.get('bottombaropen')) {
+            if (settings.get('bottombaropen')) {
                 $('#bottombar').css('height', `${bottombarHeight}px`);
                 $('#bottombar').css('border-top-width', '2px');
                 $('#toggle-bottombar').attr('title', i18n.getMessage('closeBottombarTitle'));
@@ -47,14 +48,14 @@ APATE.BottombarController = (function BottombarController() {
 
         toggle() {
             // FIXME: Move this to css where possible (toggle code)
-            if (this.settings.get('bottombaropen')) {
-                this.settings.set('bottombaropen', false);
+            if (settings.get('bottombaropen')) {
+                settings.set('bottombaropen', false);
                 $('#bottombar').css('height', `${MIN_HEIGHT}px`);
                 $('#toggle-bottombar').attr('title', i18n.getMessage('openBottombarTitle'));
                 $('#bottombar-resizer').hide();
             } else {
-                this.settings.set('bottombaropen', true);
-                $('#bottombar').css('height', `${this.settings.get('bottombarheight')}px`);
+                settings.set('bottombaropen', true);
+                $('#bottombar').css('height', `${settings.get('bottombarheight')}px`);
                 // $('#bottombar').css('border-top-width', '2px');
                 $('#toggle-bottombar').attr('title', i18n.getMessage('closeBottombarTitle'));
                 $('#bottombar-resizer').show();
@@ -83,7 +84,7 @@ APATE.BottombarController = (function BottombarController() {
 
         resizeFinish(e) {
             const bottombarHeight = this.resizeOnMouseMove(e);
-            this.settings.set('bottombarheight', bottombarHeight);
+            settings.set('bottombarheight', bottombarHeight);
             $(document).off('mousemove.bottombar');
             $(document).off('mouseup.bottombar');
             $(document).css('cursor', 'default');
@@ -95,6 +96,7 @@ APATE.BottombarController = (function BottombarController() {
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
+APATE.BottombarController = Injector.resolve(['settings'], BottombarController);
 export default APATE.BottombarController;

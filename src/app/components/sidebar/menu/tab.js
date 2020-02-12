@@ -1,7 +1,7 @@
 
-import APATE from './apate';
-import i18n from './utils/i18n';
-import utils from './utils/utils';
+import APATE from '../../../apate';
+import i18n from '../../../utils/i18n';
+import utils from '../../../utils/utils';
 // import Datastore from './utils/datastore';
 // import i18n from './utils/i18n';
 // import MessageBox from './dialogs/messagebox';

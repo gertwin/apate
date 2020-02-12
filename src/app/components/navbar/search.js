@@ -1,10 +1,10 @@
 
-import i18n from '../utils/i18n';
-import APATE from '../apate';
+import i18n from '../../utils/i18n';
+import APATE from '../../apate';
 
 /* globals $, document */
 
-APATE.namespace('APATE.SearchController');
+APATE.namespace('APATE');
 
 
 APATE.SearchController = (function searchController() {

@@ -19,7 +19,7 @@
     "url": "https://github.com/gertwin/apate/issues"
   },
   "homepage": "https://github.com/gertwin/apate#readme",
-  "browserslist": "> 0.25%, not dead",
+  "browserslist": "> 5%, not dead",
   "dependencies": {
     "@material/base": "^3.1.0",
     "@material/button": "^3.2.0",

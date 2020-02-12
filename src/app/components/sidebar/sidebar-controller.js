@@ -1,20 +1,23 @@
 
-import i18n from '../utils/i18n';
-import APATE from '../apate';
+import i18n from '../../utils/i18n';
+import APATE from '../../apate';
+import Injector from '../../utils/injector';
 
-/* globals $, document */
+/* globals $, window, document */
 
-APATE.namespace('APATE.SidebarController');
+APATE.namespace('APATE');
 
 
-APATE.SidebarController = (function SidebarController() {
+const SidebarController = (settings) => {
+
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(settings) {
-        this.settings = settings;
-        $('#toggle-sidebar').click(this.toggle.bind(this));
+    const fnConstructor = function fn() {
+        // $('#toggle-sidebar').click(this.toggle.bind(this));
         $('#sidebar-resizer').mousedown(this.resizeStart.bind(this));
+
+        window.EventBus.addEventListener('toggle-sidebar', this.toggle);
     };
 
     /**
@@ -27,8 +30,8 @@ APATE.SidebarController = (function SidebarController() {
 
         init() {
             // FIXME: move this to CSS where possible (init code)
-            if (this.settings.get('sidebaropen')) {
-                $('#sidebar').css('width', `${this.settings.get('sidebarwidth')}px`);
+            if (settings.get('sidebaropen')) {
+                $('#sidebar').css('width', `${settings.get('sidebarwidth')}px`);
                 $('#sidebar').css('border-right-width', '2px');
                 $('#toggle-sidebar').attr('title', i18n.getMessage('closeSidebarButton'));
             } else {
@@ -40,23 +43,30 @@ APATE.SidebarController = (function SidebarController() {
 
         toggle() {
             // FIXME: Move this to css where possible (toggle code)
-            if (this.settings.get('sidebaropen')) {
-                this.settings.set('sidebaropen', false);
+            if (settings.get('sidebaropen')) {
+                settings.set('sidebaropen', false);
                 $('#sidebar').css('width', '0');
                 $('#sidebar').css('border-right-width', '0');
-                $('#toggle-sidebar').attr('title', i18n.getMessage('openSidebarButton'));
+                // $('#toggle-sidebar').attr('title', i18n.getMessage('openSidebarButton'));
             } else {
-                this.settings.set('sidebaropen', true);
-                $('#sidebar').css('width', `${this.settings.get('sidebarwidth')}px`);
+                settings.set('sidebaropen', true);
+                $('#sidebar').css('width', `${settings.get('sidebarwidth')}px`);
                 $('#sidebar').css('border-right-width', '2px');
-                $('#toggle-sidebar').attr('title', i18n.getMessage('closeSidebarButton'));
+                // $('#toggle-sidebar').attr('title', i18n.getMessage('closeSidebarButton'));
             }
+            window.EventBus.dispatchEvent('sidebar-toggled', { sidebarOpen: settings.get('sidebaropen') });
+
             $.event.trigger('sidebar-toggle');
+
             setTimeout(() => {
                 $.event.trigger('sidebar-resize');
             }, 200);
         },
 
+        /**
+         * Initialize resizing state
+         * @param  {object} e [event object]
+         */
         resizeStart(e) {
             this.resizeMouseStartX = e.clientX;
             this.resizeStartWidth = parseInt($('#sidebar').css('width'), 10);
@@ -66,6 +76,10 @@ APATE.SidebarController = (function SidebarController() {
             $('#sidebar').css('transition', 'none');
         },
 
+        /**
+         * Resizing mouse move event
+         * @param  {object} e [event object]
+         */
         resizeOnMouseMove(e) {
             const change = e.clientX - this.resizeMouseStartX;
             let sidebarWidth = this.resizeStartWidth + change;
@@ -76,9 +90,13 @@ APATE.SidebarController = (function SidebarController() {
             return sidebarWidth;
         },
 
+        /**
+         * Finish resizing state
+         * @param  {object} e [event object]
+         */
         resizeFinish(e) {
             const sidebarWidth = this.resizeOnMouseMove(e);
-            this.settings.set('sidebarwidth', sidebarWidth);
+            settings.set('sidebarwidth', sidebarWidth);
             $(document).off('mousemove.sidebar');
             $(document).off('mouseup.sidebar');
             $(document).css('cursor', 'default');
@@ -89,6 +107,7 @@ APATE.SidebarController = (function SidebarController() {
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
+APATE.SidebarController = Injector.resolve(['settings'], SidebarController);
 export default APATE.SidebarController;

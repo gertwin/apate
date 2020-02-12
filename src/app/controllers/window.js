@@ -6,26 +6,30 @@ import { MDCRadio } from '@material/radio';
 
 import i18n from '../utils/i18n';
 import APATE from '../apate';
-import SidebarController from './sidebar';
-import BottombarController from './bottombar';
+import Navbar from '../components/navbar/navbar';
+import SidebarController from '../components/sidebar/sidebar-controller';
+import BottombarController from '../components/bottombar/bottombar-controller';
+
+import Injector from '../utils/injector';
 
 /* globals $, window, document, ResizeObserver */
 
 APATE.namespace('APATE.WindowController');
 
 
-APATE.WindowController = (function windowController() {
+const WindowController = (settings) => {
+
     /**
      * public API -- constructor
      */
     const fnConstructor = function fn(params) {
         this.editor = params.editor;
         this.output = params.output;
-        this.settings = params.settings;
         this.tabs = params.tabs;
-        // sidebar
-        this.sidebar = new SidebarController(this.settings);
-        this.bottombar = new BottombarController(this.settings);
+        // components
+        this.navbar = new Navbar();
+        this.sidebar = new SidebarController();
+        this.bottombar = new BottombarController();
         // rest
         $(window).bind('error', this.onError.bind(this));
         $(document).bind('filesystemerror', this.onFileSystemError.bind(this));
@@ -76,12 +80,12 @@ APATE.WindowController = (function windowController() {
                 formField.input = new MDCRadio(element);
             });
 
-            if (this.settings.isReady()) {
+            if (settings.isReady()) {
                 this.sidebar.init();
                 this.bottombar.init();
             } else {
-                $(document).bind('settingsready', this.sidebar.init.bind(this));
-                $(document).bind('settingsready', this.bottombar.init.bind(this));
+                $(document).bind('settingsready', this.sidebar.init);
+                $(document).bind('settingsready', this.bottombar.init);
             }
         },
 
@@ -126,6 +130,7 @@ APATE.WindowController = (function windowController() {
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
+APATE.WindowController = Injector.resolve(['settings'], WindowController);
 export default APATE.WindowController;

@@ -18,7 +18,7 @@ APATE.Settings = (function settings() {
         this.settings = {};
         // add default settings
         Object.keys(CONST.SETTINGS).forEach((key) => {
-            this.settings[key] = CONST.SETTINGS[key]['default'];
+            this.settings[key] = CONST.SETTINGS[key].default;
         });
         this.readsettings();
     };
@@ -75,7 +75,7 @@ APATE.Settings = (function settings() {
 
         async removeOldsettings() {
             if ('autosave' in this.settings) {
-                delete this.settings['autosave'];
+                delete this.settings.autosave;
             }
             await this.storage.common.delete('autosave');
         },

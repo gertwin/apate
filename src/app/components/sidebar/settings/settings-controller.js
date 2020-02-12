@@ -1,21 +1,20 @@
-import CONST from '../const';
-import APATE from '../apate';
-// import Settings from '../settings';
+
+import CONST from '../../../const';
+import APATE from '../../../apate';
+import Injector from '../../../utils/injector';
 
 /* globals $, document */
 
-APATE.namespace('APATE.SettingsController');
+APATE.namespace('APATE');
 
 
-APATE.SettingsController = (function settingsController() {
+const SettingsController = (settings) => {
     /**
      * @constructor
      * @param {Settings} settings Settings service.
      */
-    const fnConstructor = function fn(settings) {
-        this.settings = settings;
-
-        if (this.settings.isReady()) {
+    const fnConstructor = function fn() {
+        if (settings.isReady()) {
             this.showAll();
         } else {
             $(document).bind('settingsready', this.showAll.bind(this));
@@ -70,9 +69,9 @@ APATE.SettingsController = (function settingsController() {
         },
 
         showAll() {
-            const settings = this.settings.getAll();
-            Object.keys(settings).forEach((key) => {
-                this.show(key, settings[key]);
+            const allSettings = settings.getAll();
+            Object.keys(allSettings).forEach((key) => {
+                this.show(key, allSettings[key]);
             });
         },
 
@@ -147,13 +146,14 @@ APATE.SettingsController = (function settingsController() {
                 break;
             }
 
-            this.settings.set(key, value);
+            settings.set(key, value);
         },
 
     };
 
     // return the constructor
     return fnConstructor;
-}());
+};
 
+APATE.SettingsController = Injector.resolve(['settings'], SettingsController);
 export default APATE.SettingsController;

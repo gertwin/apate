@@ -1,7 +1,7 @@
 import { MDCRipple } from '@material/ripple';
 
-import i18n from '../utils/i18n';
-import APATE from '../apate';
+import i18n from '../../../utils/i18n';
+import APATE from '../../../apate';
 
 /* globals $, document */
 

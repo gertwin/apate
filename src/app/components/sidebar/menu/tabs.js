@@ -1,27 +1,26 @@
 
-import APATE from './apate';
-import utils from './utils/utils';
-import i18n from './utils/i18n';
-import Injector from './utils/injector';
+import APATE from '../../../apate';
+import utils from '../../../utils/utils';
+import i18n from '../../../utils/i18n';
+import Injector from '../../../utils/injector';
 import Tab from './tab';
-import DialogDocumentOpen from './dialogs/dialogopen';
-import DialogSaveAs from './dialogs/dialogsaveas';
-import MessageBox from './dialogs/messagebox';
+import DialogDocumentOpen from '../../../dialogs/dialogopen';
+import DialogSaveAs from '../../../dialogs/dialogsaveas';
+import MessageBox from '../../../dialogs/messagebox';
 
 /* globals $, document, FileReader */
 
 APATE.namespace('APATE');
 
 
-const Tabs = (documentStore) => {
+const Tabs = (documentStore, settings) => {
 
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(editor, settings) {
+    const fnConstructor = function fn(editor) {
         this.newTabId = 0;
         this.editor = editor;
-        this.settings = settings;
         this.tabs = [];
         this.currentTab = null;
         $(document).bind('docchange', this.onDocChanged.bind(this));
@@ -403,5 +402,5 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
 };
 
 
-APATE.Tabs = Injector.resolve(['documentStore'], Tabs);
+APATE.Tabs = Injector.resolve(['documentStore', 'settings'], Tabs);
 export default APATE.Tabs;
