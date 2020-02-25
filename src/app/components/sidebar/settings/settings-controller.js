@@ -50,7 +50,9 @@ const SettingsController = (settings) => {
 
                 case 'radio':
                     Object.values(document.querySelectorAll(`input[name=setting-${key}]`)).forEach((element) => {
-                        element.addEventListener('input', () => this.saveSetting(key));
+                        element.addEventListener('input', () => {
+                            return this.saveSetting(key)
+                        });
                     });
                     break;
 

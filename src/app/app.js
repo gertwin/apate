@@ -29,7 +29,7 @@ import 'material-design-icons/iconfont/material-icons.css';
 
 /* global document, $, Blob */
 
-APATE.namespace('APATE.APATEApp');
+APATE.namespace('APATE');
 
 
 const ApateApp = (settings) => {
