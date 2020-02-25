@@ -3,31 +3,21 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import { MDCRipple } from '@material/ripple';
+// import picker from './gapi/picker';
+//
 import APATE from './apate';
 import i18n from './utils/i18n';
-// import utils from './utils/utils';
-import saveAs from './utils/filesaver';
 import i18nTemplate from './utils/i18n-template';
 import MessageBox from './dialogs/messagebox';
-// import picker from './gapi/picker';
-
-// import Settings from './stores/settings';
-import Editor from './components/editor/source-editor';
-import Tabs from './components/sidebar/menu/tabs';
-import Output from './output';
-
-import HotkeysController from './controllers/hotkeys';
-import MenuController from './components/sidebar/menu/menu-controller';
-import SearchController from './components/navbar/search';
 import SettingsController from './components/sidebar/settings/settings-controller';
 import WindowController from './controllers/window';
 
 import Injector from './utils/injector';
-import Executor from './executor';
+// import Executor from './executor';
 
 import 'material-design-icons/iconfont/material-icons.css';
 
-/* global document, $, Blob */
+/* global document, */
 
 APATE.namespace('APATE');
 
@@ -38,18 +28,8 @@ const ApateApp = (settings) => {
      * public API -- constructor
      */
     const fnConstructor = function fnConstructor() {
-        this.editor = null;
-        this.tabs = null;
-
-        this.hotkeysController = null;
-        this.menuController = null;
-        this.searchController = null;
         this.settingsController = null;
         this.windowController = null;
-
-        this.hasFrame = false;
-        // set ripple effect on all buttons
-        const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
     };
 
     /**
@@ -64,44 +44,10 @@ const ApateApp = (settings) => {
         * Called when all the resources have loaded.
          * All initializations should be done here.
         */
-        async init() {
-            // components
-            this.editor = new Editor($('#editor')[0]);
-            this.tabs = new Tabs(this.editor);
-            this.output = new Output($('#output')[0]);
+        init() {
             // controllers
-            this.menuController = new MenuController(this.tabs);
-            this.searchController = new SearchController(this.editor.getSearch());
             this.settingsController = new SettingsController();
-            this.windowController = new WindowController({
-                editor: this.editor,
-                output: this.output,
-                tabs: this.tabs,
-            });
-            this.hotkeysController = new HotkeysController(this.windowController,
-                this.tabs,
-                this.editor);
-            // file selection handler
-            this.fileSelectorElem = document.querySelector('input[id="file-selector"]');
-            if (this.fileSelectorElem) {
-                this.fileSelectorElem.onchange = () => {
-                    this.uploadFile(this.fileSelectorElem.files);
-                };
-            }
-            // tool buttons
-            const btnImport = document.querySelector('#btn-import');
-            btnImport.addEventListener('click', this.onFileUpload.bind(this));
-            const mdBtnImport = new MDCRipple(btnImport);
-            mdBtnImport.unbounded = true;
-            const btnExport = document.querySelector('#btn-export');
-            btnExport.addEventListener('click', this.onFileDownload.bind(this));
-            const mdBtnExport = new MDCRipple(btnExport);
-            mdBtnExport.unbounded = true;
-            const btnReport = new MDCRipple(document.querySelector('#btn-report'));
-            btnReport.unbounded = true;
-            // setting handlers
-            $(document).bind('settingsready', this.onSettingsReady.bind(this));
-            $(document).bind('settingschange', this.onSettingsChanged.bind(this));
+            this.windowController = new WindowController();
             // init i18n
             i18n.init().then(() => {
                 // translate document
@@ -109,146 +55,18 @@ const ApateApp = (settings) => {
                 // TODO: google drive picker init
                 // picker.init();
                 // TODO: session management
-                const openTabs = [];
-                this.openTabs(openTabs);
+                // const openTabs = [];
+                // this.openTabs(openTabs);
+
+                // set ripple effect on all buttons
+                const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
+
             }).catch((error) => {
                 const msg = new MessageBox();
                 msg.showOk(null, error);
             });
-
-            /**
-             * Run button handler
-             */
-            $('#button-run').bind('click', () => {
-                // program from current editor
-                const tab = this.tabs.getCurrentTab();
-                if (tab) {
-                    const executor = new Executor(this.output);
-                    let content = tab.getSelection();
-                    if (!content || content.length === 0) {
-                        content = tab.getContent();
-                    }
-                    executor.run(content);
-                }
-            });
         },
 
-        /**
-         * Trigger file selection
-         */
-        onFileUpload() {
-            if (this.fileSelectorElem) {
-                // reset preveious selected file
-                this.fileSelectorElem.value = '';
-                // select a new file
-                this.fileSelectorElem.click();
-            }
-        },
-
-        /**
-         * Upload a local selected file
-         */
-        uploadFile(files) {
-            this.tabs.openFileEntry(files);
-        },
-
-        /**
-         * Download the contents under the current tab
-         */
-        onFileDownload() {
-            const tab = this.tabs.getCurrentTab();
-            if (tab) {
-                const data = tab.getContent();
-                const blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
-                let filename = tab.getName();
-                // check file extension
-                if (filename.indexOf('.scm') === -1) {
-                    filename = `${filename}.scm`;
-                }
-                saveAs(blob, filename);
-            }
-        },
-
-        /**
-        * Open one tab per FileEntry passed or a new Untitled tab if no tabs were
-        * successfully opened.
-        * @param {!Array.<FileEntry>} entries The file entries to be opened.
-        */
-        openTabs(entries) {
-            for (let i = 0; i < entries.length; i++) {
-                this.tabs.openFileEntry(entries[i]);
-            }
-
-            if (!this.tabs.hasOpenTab()) {
-                this.tabs.newTab();
-            }
-        },
-
-        /**
-        * @return {Array.<FileEntry>}
-        */
-        getFilesToRetain() {
-            return this.tabs.getFilesToRetain();
-        },
-
-        setTheme() {
-            const theme = settings.get('theme');
-            this.windowController.setTheme(theme);
-            this.editor.setTheme(theme);
-        },
-
-        /**
-        * Called when all the services have started and settings are loaded.
-        */
-        onSettingsReady() {
-            this.setTheme();
-            // editor settings
-            this.editor.setFontSize(settings.get('fontsize'));
-            this.editor.showHideLineNumbers(settings.get('linenumbers'));
-            this.editor.setSmartIndent(settings.get('smartindent'));
-            this.editor.replaceTabWithSpaces(settings.get('spacestab'));
-            this.editor.setTabSize(settings.get('tabsize'));
-            this.editor.setWrapLines(settings.get('wraplines'));
-        },
-
-        /**
-        * @param {Event} e
-        * @param {string} key
-        * @param {*} value
-        */
-        onSettingsChanged(e, key, value) {
-            switch (key) {
-            case 'fontsize':
-                this.editor.setFontSize(value);
-                break;
-
-            case 'linenumbers':
-                this.editor.showHideLineNumbers(value);
-                break;
-
-            case 'smartindent':
-                this.editor.setSmartIndent(value);
-                break;
-
-            case 'spacestab':
-                this.editor.replaceTabWithSpaces(settings.get('spacestab'));
-                break;
-
-            case 'tabsize':
-                this.editor.setTabSize(value);
-                break;
-
-            case 'theme':
-                this.setTheme();
-                break;
-
-            case 'wraplines':
-                this.editor.setWrapLines(value);
-                break;
-            default:
-                break;
-            }
-        },
     };
 
     // return the constructor

@@ -27,7 +27,7 @@ const SourceEditor = (settings) => {
         this.cm.setSize(null, 'auto');
         this.cm.on('change', this.onChange.bind(this));
         this.setTheme();
-        this.search = new Search(this.cm);
+        this._search = new Search(this.cm);
         // Mimic Sublime behaviour there.
         this.defaultTabHandler = CodeMirror.commands.defaultTab;
     };
@@ -62,8 +62,8 @@ const SourceEditor = (settings) => {
         * @return {Search}
         * Return search object.
         */
-        getSearch() {
-            return this.search;
+        get search() {
+            return this._search;
         },
 
         onChange() {

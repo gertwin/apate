@@ -233,7 +233,6 @@ export default class Interpreter {
                         result.value = evaluator.evaluate(form, result, this.globalEnv);
                         if (typeof result.value !== 'undefined') {
                             if (result.value instanceof Promise) {
-                                debugger;
                                 // do not output
                             } else if (Array.isArray(result.value)
                                 && result.value[0].keywords

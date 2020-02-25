@@ -14,10 +14,10 @@ const HotkeysController = (settings) => {
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(windowController, tabs, editor) {
-        this.windowController = windowController;
-        this.tabs = tabs;
-        this.editor = editor;
+    const fnConstructor = function fn() {
+        this._tabs = null;
+        this._editor = null;
+        this._windowController = null;
 
         this.ZOOM_IN_FACTOR = 9 / 8;
         this.ZOOM_OUT_FACTOR = 8 / 9;
@@ -48,9 +48,9 @@ const HotkeysController = (settings) => {
                 switch (e.key) {
                 case 'Tab':
                     if (e.shiftKey) {
-                        this.tabs.previousTab();
+                        this._tabs.previousTab();
                     } else {
-                        this.tabs.nextTab();
+                        this._tabs.nextTab();
                     }
                     return false;
 
@@ -60,16 +60,16 @@ const HotkeysController = (settings) => {
                     return false;
 
                 case 'n':
-                    this.tabs.newTab();
+                    this._tabs.newTab();
                     return false;
 
                 case 'N':
-                    this.tabs.newWindow();
+                    this._tabs.newWindow();
                     return false;
 
                 case 'o':
                 case 'O':
-                    this.tabs.openFile();
+                    this._tabs.openFile();
                     return false;
 
                 case 'p':
@@ -78,19 +78,19 @@ const HotkeysController = (settings) => {
                     return false;
 
                 case 's':
-                    this.tabs.save();
+                    this._tabs.save();
                     return false;
 
                 case 'S':
-                    this.tabs.saveAs();
+                    this._tabs.saveAs();
                     return false;
 
                 case 'w':
-                    this.tabs.closeCurrent();
+                    this._tabs.closeCurrent();
                     return false;
 
                 case 'Z':
-                    this.editor.redo();
+                    this._editor.redo();
                     return false;
 
                 case '0':
@@ -131,6 +131,31 @@ const HotkeysController = (settings) => {
                     settings.set('fontsize', fontSize * this.ZOOM_OUT_FACTOR);
                 }
             }
+        },
+
+        get tabs() {
+            return this._tabs;
+        },
+
+        set tabs(tabs) {
+            this._tabs = tabs;
+        },
+
+        get editor() {
+            return this._editor;
+        },
+
+        set editor(editor) {
+            this._editor = editor;
+        },
+
+
+        get windowController() {
+            return this._windowController;
+        },
+
+        set windowController(windowController) {
+            this._windowController = windowController;
         },
 
     };

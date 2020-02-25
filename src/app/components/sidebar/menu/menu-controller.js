@@ -2,6 +2,7 @@ import { MDCRipple } from '@material/ripple';
 
 import i18n from '../../../utils/i18n';
 import APATE from '../../../apate';
+import Tabs from './tabs';
 
 /* globals $, document */
 
@@ -12,8 +13,8 @@ APATE.MenuController = (function menuController() {
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(tabs) {
-        this.tabs = tabs;
+    const fnConstructor = function fn() {
+        this._tabs = new Tabs();
         this.dragItem = null;
         $('#file-menu-new').click(this.newTab.bind(this));
         $('#file-menu-open').click(this.open.bind(this));
@@ -26,6 +27,7 @@ APATE.MenuController = (function menuController() {
         $(document).bind('tabpathchange', this.onTabPathChange.bind(this));
         $(document).bind('tabrenamed', this.onTabRenamed.bind(this));
         $(document).bind('tabsave', this.onTabSave.bind(this));
+
     };
 
     /**
@@ -35,6 +37,12 @@ APATE.MenuController = (function menuController() {
     fnConstructor.prototype = {
         constructor: APATE.MenuController,
         version: '1.0',
+
+        init() {
+            if (!this._tabs.hasOpenTab()) {
+                this._tabs.newTab();
+            }
+        },
 
         /**
         * Adds a new draggable file tab to the UI.
@@ -92,12 +100,12 @@ APATE.MenuController = (function menuController() {
             } else {
                 overItem.before(this.dragItem);
             }
-            this.tabs.reorder(this.dragItem.index(), overItem.index());
+            this._tabs.reorder(this.dragItem.index(), overItem.index());
         },
 
         onTabRenamed(e, tab) {
             $(`#tab${tab.getId()} .filename`).text(tab.getName());
-            this.tabs.modeAutoSet(tab);
+            this._tabs.modeAutoSet(tab);
         },
 
         onTabPathChange(e, tab) {
@@ -122,27 +130,27 @@ APATE.MenuController = (function menuController() {
         },
 
         newTab() {
-            this.tabs.newTab();
+            this._tabs.newTab();
             return false;
         },
 
         open() {
-            this.tabs.openFile();
+            this._tabs.openFile();
             return false;
         },
 
         save() {
-            this.tabs.save();
+            this._tabs.save();
             return false;
         },
 
         saveas() {
-            this.tabs.saveAs();
+            this._tabs.saveAs();
             return false;
         },
 
         tabButtonClicked(id) {
-            this.tabs.showTab(id);
+            this._tabs.showTab(id);
             return false;
         },
 
@@ -152,8 +160,13 @@ APATE.MenuController = (function menuController() {
         * @param {number} The id of the tab to close.
         */
         closeTab(e, id) {
-            this.tabs.close(id);
+            this._tabs.close(id);
             e.stopPropagation();
+        },
+
+
+        get tabs() {
+            return this._tabs;
         },
 
     };

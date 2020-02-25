@@ -1,6 +1,7 @@
 
 import i18n from '../../utils/i18n';
 import APATE from '../../apate';
+import MenuController from './menu/menu-controller';
 import Injector from '../../utils/injector';
 
 /* globals $, window, document */
@@ -14,6 +15,9 @@ const SidebarController = (settings) => {
      * public API -- constructor
      */
     const fnConstructor = function fn() {
+
+        this._menuController = new MenuController();
+
         // $('#toggle-sidebar').click(this.toggle.bind(this));
         $('#sidebar-resizer').mousedown(this.resizeStart.bind(this));
 
@@ -39,6 +43,8 @@ const SidebarController = (settings) => {
                 $('#sidebar').css('border-right-width', '0');
                 $('#toggle-sidebar').attr('title', i18n.getMessage('openSidebarButton'));
             }
+
+            this._menuController.init();
         },
 
         toggle() {
@@ -101,6 +107,10 @@ const SidebarController = (settings) => {
             $(document).off('mouseup.sidebar');
             $(document).css('cursor', 'default');
             $('#sidebar').css('transition', 'width 0.2s ease-in-out');
+        },
+
+        get menuController() {
+            return this._menuController;
         },
 
     };

@@ -18,9 +18,9 @@ const Tabs = (documentStore, settings) => {
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(editor) {
+    const fnConstructor = function fn() {
         this.newTabId = 0;
-        this.editor = editor;
+        this._editor = null;
         this.tabs = [];
         this.currentTab = null;
         $(document).bind('docchange', this.onDocChanged.bind(this));
@@ -113,7 +113,7 @@ const Tabs = (documentStore, settings) => {
             } else {
                 // create new tab
                 this.newTabId++;
-                const session = this.editor.newSession(fileContent);
+                const session = this._editor.newSession(fileContent);
                 const lineEndings = utils.guessLineEndings(fileContent);
                 // create new tab
                 const tab = new Tab(this.newTabId, session, lineEndings, fileName || null);
@@ -123,7 +123,7 @@ const Tabs = (documentStore, settings) => {
                 // set editor mode
                 const fileNameExtension = tab.getExtension();
                 if (fileNameExtension) {
-                    this.editor.setMode(session, fileNameExtension);
+                    this._editor.setMode(session, fileNameExtension);
                 }
             }
         },
@@ -174,10 +174,10 @@ const Tabs = (documentStore, settings) => {
                 console.error('Can\'t find tab', tabId);
                 return;
             }
-            this.editor.setSession(tab.getSession());
+            this._editor.setSession(tab.getSession());
             this.currentTab = tab;
             $.event.trigger('switchtab', tab);
-            this.editor.focus();
+            this._editor.focus();
         },
 
         /**
@@ -326,7 +326,7 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
         modeAutoSet(tab) {
             const extension = tab.getExtension();
             if (extension) {
-                this.editor.setMode(tab.getSession(), extension);
+                this._editor.setMode(tab.getSession(), extension);
             }
         },
 
@@ -393,6 +393,22 @@ ${i18n.getMessage('saveFilePromptLine2')}`;
          */
         hasOpenTab() {
             return !!this.tabs.length;
+        },
+
+        /**
+         * Get editor reference
+         * @return {object} [editor]
+         */
+        get editor() {
+            return this._editor;
+        },
+
+        /**
+         * Set editor reference
+         * @param  {object} editor [editor reference]
+         */
+        set editor(editor) {
+            this._editor = editor;
         },
 
     };

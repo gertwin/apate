@@ -31,8 +31,8 @@ APATE.SearchController = (function searchController() {
     /**
      * public API -- constructor
      */
-    const fnConstructor = function fn(search) {
-        this.search = search;
+    const fnConstructor = function fn() {
+        this._search = null;
 
         document.getElementById('search-input').addEventListener('focus', () => { this.activateSearch(); });
         $('#search-input').bind('input', this.onChange.bind(this));
@@ -59,8 +59,8 @@ APATE.SearchController = (function searchController() {
                 $('#search-counting').text('');
                 return;
             }
-            const searchCount = this.search.getResultsCount();
-            const searchIndex = this.search.getCurrentIndex();
+            const searchCount = this._search.getResultsCount();
+            const searchIndex = this._search.getCurrentIndex();
             $('#search-counting').text(i18n.getMessage('searchCounting', [searchIndex, searchCount]));
             if (searchCount === 0) {
                 $('#search-counting').addClass('nomatches');
@@ -70,8 +70,8 @@ APATE.SearchController = (function searchController() {
         },
 
         findNext(optReverse) {
-            if (this.search.getQuery()) {
-                this.search.findNext(optReverse);
+            if (this._search.getQuery()) {
+                this._search.findNext(optReverse);
                 this.updateSearchCount(optReverse);
             }
         },
@@ -81,7 +81,7 @@ APATE.SearchController = (function searchController() {
         * @private
         */
         activateSearch() {
-            this.search.clear();
+            this._search.clear();
             document.getElementById('search-input').select();
             $('search-count-container').show();
             $('header').addClass('search-active');
@@ -94,20 +94,20 @@ APATE.SearchController = (function searchController() {
                 $('#search-counting').text('');
                 $('header').removeClass('search-active');
                 $('search-count-container').show();
-                addToSearchHitory(this.search.query);
-                this.search.clear();
+                addToSearchHitory(this._search.query);
+                this._search.clear();
             }
         },
 
         onChange() {
             const searchString = $('#search-input').val();
-            if (searchString === this.search.getQuery()) {
+            if (searchString === this._search.getQuery()) {
                 return;
             }
             if (searchString) {
-                this.search.find(searchString);
+                this._search.find(searchString);
             } else {
-                this.search.clear();
+                this._search.clear();
             }
             this.updateSearchCount();
         },
@@ -121,7 +121,7 @@ APATE.SearchController = (function searchController() {
 
             case 'Escape':
                 e.stopPropagation();
-                this.search.unfocus();
+                this._search.unfocus();
                 break;
 
             default:
@@ -135,6 +135,16 @@ APATE.SearchController = (function searchController() {
 
         onFindPrevious() {
             this.findNext(true /* reverse */);
+        },
+
+
+        get search() {
+            return this._search;
+        },
+
+
+        set search(search) {
+            this._search = search;
         },
 
     };

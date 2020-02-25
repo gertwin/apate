@@ -1,6 +1,7 @@
 
 import i18n from '../../utils/i18n';
 import APATE from '../../apate';
+import Output from './output';
 import Injector from '../../utils/injector';
 
 /* globals $, document */
@@ -17,6 +18,9 @@ const BottombarController = (settings) => {
      * public API -- constructor
      */
     const fnConstructor = function fn() {
+
+        this._output = new Output($('#output')[0]);
+
         $('#toggle-bottombar').click(this.toggle.bind(this));
         $('#bottombar-resizer').mousedown(this.resizeStart.bind(this));
     };
@@ -90,6 +94,10 @@ const BottombarController = (settings) => {
             $(document).css('cursor', 'default');
             $('#bottombar').css('transition', 'height 0.3s ease-in-out');
             $('#panel-container').css('height', `${bottombarHeight - 65}px`);
+        },
+
+        get output() {
+            return this._output;
         },
 
     };

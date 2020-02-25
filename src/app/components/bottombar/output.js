@@ -1,5 +1,5 @@
 
-import APATE from './apate';
+import APATE from '../../apate';
 
 /* globals $, document */
 
