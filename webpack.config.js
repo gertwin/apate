@@ -1,7 +1,7 @@
 
 const path = require('path');
 
-process.env.HOST = 'apate-dev.com';
+// process.env.HOST = 'apate-dev.com';
 process.env.PORT = 8080;
 
 
